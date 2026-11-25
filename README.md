@@ -12,10 +12,27 @@ Unsupervised machine learning project that groups patients using only routine bl
 
 ## Key findings
 
-> Fill this in after running the notebook. Keep it to 3-4 bullets with real numbers, for example:
-> - Selected K = **_** based on ...
-> - Cluster 0 is characterised by high ... and low ...
-> - Adjusted Rand index vs. diagnosis: **_**, meaning ...
+- **K = 2 was selected.** Its silhouette score is 0.59, while every K from 3 to 8 scores only about 0.13 to 0.14, so there is no clear structure beyond two groups.
+- **The two clusters are very unequal:** 579 patients in cluster 0 and 36 in cluster 1.
+- **Cluster 1 is a clearly abnormal group.** Compared with cluster 0, its patients are older (average 57 vs 47 years) and have lower albumin (29.6 vs 42.4), cholinesterase (4.1 vs 8.5) and cholesterol (4.0 vs 5.5), and much higher bilirubin (50.7 vs 8.9), AST (104 vs 30), GGT (150 vs 33) and creatinine (127 vs 78).
+- **Match with the real diagnoses (never given to the model):** cluster 1 contains 23 of the 30 cirrhosis patients and 6 of the 7 suspect blood donors. Cluster 0 contains 529 of the 533 blood donors, but also 22 of 24 hepatitis and 20 of 21 fibrosis patients. The adjusted Rand index is 0.47.
+- **Interpretation:** routine blood-test values separate advanced liver disease well, but they cannot tell early hepatitis or fibrosis apart from healthy donors.
+
+All numbers come from running the notebook with `random_state=42`.
+
+## Results
+
+### Choosing K
+![Elbow method and silhouette score for K = 2 to 8](images/k_selection.svg)
+
+### Clusters in 2D (PCA)
+![K-means clusters projected with PCA](images/pca_clusters.svg)
+
+### What defines each cluster
+![Cluster profile heatmap](images/cluster_profile_heatmap.svg)
+
+### Clusters vs. real diagnoses
+![Share of each diagnosis group placed in cluster 1](images/diagnosis_vs_cluster.svg)
 
 ## Methods and tools
 
@@ -27,7 +44,8 @@ Python, pandas, NumPy, scikit-learn (K-means, PCA, silhouette score), SciPy, mat
 hcv-patient-clustering/
 ├── hcv_patient_clustering_kmeans.ipynb   # full analysis
 ├── data/
-│   └── hcv_dataset.csv                   # download from the UCI link above
+│   └── hcv_dataset.csv                   # HCV dataset (UCI)
+├── images/                               # result charts shown above
 ├── requirements.txt
 └── README.md
 ```
@@ -38,8 +56,11 @@ hcv-patient-clustering/
    ```bash
    pip install -r requirements.txt
    ```
-2. Download the dataset from UCI and save it as `data/hcv_dataset.csv`.
-3. Open the notebook in Jupyter or click the Colab badge above, and run all cells.
+2. Open the notebook in Jupyter or click the Colab badge above, and run all cells. The dataset is already in `data/hcv_dataset.csv`.
+
+## Data
+
+Lichtinghagen, R., Klawonn, F., & Hoffmann, G. (2020). *HCV data* [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5D612. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 ## Limitations
 
